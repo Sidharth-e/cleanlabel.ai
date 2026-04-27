@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, Link as LinkIcon, Upload, X } from "lucide-react";
+import { Camera, Link as LinkIcon, Upload, X, Type } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function UploadSection() {
-  const { file, previewUrl, urlInput, setFile, setUrlInput, reset } = useUploadStore();
+  const { file, previewUrl, urlInput, textInput, setFile, setUrlInput, setTextInput, reset } = useUploadStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState("upload");
 
@@ -25,16 +25,33 @@ export function UploadSection() {
     if (droppedFile) setFile(droppedFile);
   };
 
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const item = e.clipboardData.items[0];
+    if (item?.type.includes("image")) {
+      const pastedFile = item.getAsFile();
+      if (pastedFile) {
+        setFile(pastedFile);
+        setActiveTab("upload");
+      }
+    }
+  };
+
   return (
-    <Card className="w-full max-w-2xl mx-auto overflow-hidden border-2 border-dashed border-muted-foreground/20 bg-card/50 backdrop-blur-sm">
+    <Card 
+      className="w-full max-w-2xl mx-auto overflow-hidden border-2 border-dashed border-muted-foreground/20 bg-card/50 backdrop-blur-sm"
+      onPaste={handlePaste}
+    >
       <CardContent className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsList className="grid w-full grid-cols-3 mb-6">
             <TabsTrigger value="upload" className="flex items-center gap-2">
-              <Upload className="w-4 h-4" /> Upload Label
+              <Upload className="w-4 h-4" /> Upload
             </TabsTrigger>
             <TabsTrigger value="url" className="flex items-center gap-2">
-              <LinkIcon className="w-4 h-4" /> Product URL
+              <LinkIcon className="w-4 h-4" /> URL
+            </TabsTrigger>
+            <TabsTrigger value="text" className="flex items-center gap-2">
+              <Type className="w-4 h-4" /> Text
             </TabsTrigger>
           </TabsList>
 
@@ -56,7 +73,7 @@ export function UploadSection() {
                     <div className="p-4 mb-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                       <Camera className="w-8 h-8 text-primary" />
                     </div>
-                    <p className="text-lg font-medium text-foreground">Click or drag photo here</p>
+                    <p className="text-lg font-medium text-foreground">Click, drag, or paste photo</p>
                     <p className="text-sm text-muted-foreground mt-1">Nutrition label from your pantry</p>
                     <input
                       type="file"
@@ -109,6 +126,25 @@ export function UploadSection() {
                   <p className="text-xs text-info flex items-center gap-2">
                     <LinkIcon className="w-3 h-3" /> We'll fetch and analyze the ingredients for you.
                   </p>
+                </div>
+              </motion.div>
+            </TabsContent>
+
+            <TabsContent key="text" value="text">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-4"
+              >
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-muted-foreground">Paste ingredients list</p>
+                  <textarea
+                    placeholder="Ingredients: Water, Sugar, Natural Flavors..."
+                    value={textInput}
+                    onChange={(e) => setTextInput(e.target.value)}
+                    className="w-full h-32 p-4 rounded-xl bg-background border border-input focus:ring-2 focus:ring-primary/20 outline-none resize-none transition-all"
+                  />
                 </div>
               </motion.div>
             </TabsContent>

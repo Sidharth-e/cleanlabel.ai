@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export function MainContent() {
   const { mutate, data, isPending, reset: resetMutation } = useAnalyze();
-  const { file, urlInput, reset: resetStore } = useUploadStore();
+  const { file, urlInput, textInput, reset: resetStore } = useUploadStore();
 
   const handleAnalyze = () => {
     mutate();
@@ -38,7 +38,7 @@ export function MainContent() {
               <Button
                 size="lg"
                 onClick={handleAnalyze}
-                disabled={isPending || (!file && !urlInput)}
+                disabled={isPending || (!file && !urlInput && !textInput)}
                 className="h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all gap-2"
               >
                 {isPending ? (
