@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { analyzeLabel } from "@/app/actions/analyze";
 import { useUploadStore } from "@/store/use-upload-store";
-import { AnalysisResult } from "@/types/analysis";
 
 export function useAnalyze() {
   const { file, textInput, setIsAnalyzing } = useUploadStore();

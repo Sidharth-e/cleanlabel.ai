@@ -9,7 +9,7 @@ import { Camera, Upload, X, Type } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function UploadSection() {
-  const { file, previewUrl, textInput, setFile, setTextInput, reset } = useUploadStore();
+  const { previewUrl, textInput, setFile, setTextInput, reset } = useUploadStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState("upload");
 
