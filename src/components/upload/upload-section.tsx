@@ -39,7 +39,7 @@ export function UploadSection() {
           </TabsList>
 
           <AnimatePresence mode="wait">
-            <TabsContent value="upload">
+            <TabsContent key="upload" value="upload">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -89,7 +89,7 @@ export function UploadSection() {
               </motion.div>
             </TabsContent>
 
-            <TabsContent value="url">
+            <TabsContent key="url" value="url">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
