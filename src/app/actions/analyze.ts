@@ -18,7 +18,7 @@ export async function analyzeLabel(formData: FormData): Promise<AnalysisResult> 
   }
 
   const model = new ChatGoogleGenerativeAI({
-    model: "gemini-3.1-flash-lite-preview", // Use flash for speed
+    model: "gemini-3-flash-preview", // Use flash for speed
     maxOutputTokens: 2048,
     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
   });
