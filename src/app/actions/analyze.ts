@@ -6,11 +6,10 @@ import { AnalysisResultSchema, AnalysisResult } from "@/types/analysis";
 
 export async function analyzeLabel(formData: FormData): Promise<AnalysisResult> {
   const file = formData.get("file") as File | null;
-  const url = formData.get("url") as string | null;
   const text = formData.get("text") as string | null;
 
-  if (!file && !url && !text) {
-    throw new Error("No image, URL, or text provided");
+  if (!file && !text) {
+    throw new Error("No image or text provided");
   }
 
 const model = new ChatGoogleGenerativeAI({
@@ -40,19 +39,6 @@ const model = new ChatGoogleGenerativeAI({
         {
           type: "image_url",
           image_url: `data:${file.type};base64,${base64}`,
-        },
-      ],
-    });
-  } else if (url) {
-    message = new HumanMessage({
-      content: [
-        {
-          type: "text",
-          text: `Fetch and analyze the product at this URL: ${url}. 
-          Extract the product name and every ingredient. 
-          Research obscure chemicals and additives. 
-          Score the product on a "Clean Label" scale (0-100) where 100 is perfectly natural.
-          Recommend 3-5 100% natural, chemical-free alternatives.`,
         },
       ],
     });
