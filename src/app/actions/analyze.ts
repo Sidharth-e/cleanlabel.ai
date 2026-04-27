@@ -3,10 +3,6 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { HumanMessage } from "@langchain/core/messages";
 import { AnalysisResultSchema, AnalysisResult } from "@/types/analysis";
-import { StructuredOutputParser } from "@langchain/core/output_parsers";
-import { PromptTemplate } from "@langchain/core/prompts";
-
-const parser = StructuredOutputParser.fromZodSchema(AnalysisResultSchema);
 
 export async function analyzeLabel(formData: FormData): Promise<AnalysisResult> {
   const file = formData.get("file") as File | null;
@@ -17,11 +13,14 @@ export async function analyzeLabel(formData: FormData): Promise<AnalysisResult> 
     throw new Error("No image, URL, or text provided");
   }
 
-  const model = new ChatGoogleGenerativeAI({
-    model: "gemini-3-flash-preview", // Use flash for speed
-    maxOutputTokens: 2048,
+const model = new ChatGoogleGenerativeAI({
+    model: "gemini-3-flash-preview",
+    maxOutputTokens: 8192,
     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    temperature: 1,
   });
+
+  const structuredModel = model.withStructuredOutput(AnalysisResultSchema);
 
   let message: HumanMessage;
 
@@ -36,9 +35,7 @@ export async function analyzeLabel(formData: FormData): Promise<AnalysisResult> 
           text: `Analyze this nutrition label. Extract the product name and every ingredient. 
           Research obscure chemicals and additives. 
           Score the product on a "Clean Label" scale (0-100) where 100 is perfectly natural.
-          Recommend 3-5 100% natural, chemical-free alternatives.
-          
-          ${parser.getFormatInstructions()}`,
+          Recommend 3-5 100% natural, chemical-free alternatives.`,
         },
         {
           type: "image_url",
@@ -55,9 +52,7 @@ export async function analyzeLabel(formData: FormData): Promise<AnalysisResult> 
           Extract the product name and every ingredient. 
           Research obscure chemicals and additives. 
           Score the product on a "Clean Label" scale (0-100) where 100 is perfectly natural.
-          Recommend 3-5 100% natural, chemical-free alternatives.
-          
-          ${parser.getFormatInstructions()}`,
+          Recommend 3-5 100% natural, chemical-free alternatives.`,
         },
       ],
     });
@@ -69,16 +64,13 @@ export async function analyzeLabel(formData: FormData): Promise<AnalysisResult> 
           text: `Analyze these ingredients: ${text}. 
           Research obscure chemicals and additives. 
           Score the product on a "Clean Label" scale (0-100) where 100 is perfectly natural.
-          Recommend 3-5 100% natural, chemical-free alternatives.
-          
-          ${parser.getFormatInstructions()}`,
+          Recommend 3-5 100% natural, chemical-free alternatives.`,
         },
       ],
     });
   }
 
-  const response = await model.invoke([message]);
-  const parsed = await parser.parse(response.content as string);
+  const parsed = await structuredModel.invoke([message]);
 
-  return parsed;
+  return parsed as AnalysisResult;
 }
