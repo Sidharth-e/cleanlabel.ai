@@ -4,13 +4,12 @@ import { useUploadStore } from "@/store/use-upload-store";
 import { AnalysisResult } from "@/types/analysis";
 
 export function useAnalyze() {
-  const { file, urlInput, textInput, setIsAnalyzing } = useUploadStore();
+  const { file, textInput, setIsAnalyzing } = useUploadStore();
 
   return useMutation({
     mutationFn: async () => {
       const formData = new FormData();
       if (file) formData.append("file", file);
-      if (urlInput) formData.append("url", urlInput);
       if (textInput) formData.append("text", textInput);
 
       setIsAnalyzing(true);
