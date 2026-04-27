@@ -2,7 +2,7 @@
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-latest-green?style=for-the-badge&logo=chainlink)](https://js.langchain.com/)
-[![Google Gemini](https://img.shields.io/badge/Google_Gemini-3.1_Flash-blue?style=for-the-badge&logo=google-gemini)](https://ai.google.dev/)
+[![Google Gemini](https://img.shields.io/badge/Google_Gemini-3.0_Flash-blue?style=for-the-badge&logo=google-gemini)](https://ai.google.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
@@ -23,7 +23,7 @@
 ## 🛠️ Tech Stack
 
 - **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Server Actions)
-- **AI Core:** [LangChain.js](https://js.langchain.com/) + [Google Gemini 1.5 Flash](https://ai.google.dev/)
+- **AI Core:** [LangChain.js](https://js.langchain.com/) + [Google Gemini 3.0 Flash](https://ai.google.dev/)
 - **State Management:** [Zustand](https://github.com/pmndrs/zustand) (UI) & [TanStack Query](https://tanstack.com/query) (Server State)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
 - **Type Safety:** Strict TypeScript implementation
@@ -72,7 +72,7 @@ Open [http://localhost:3000](http://localhost:3000) to start scanning labels.
 graph TD
     User[User] -->|Upload Image/Text| Frontend[Next.js Frontend]
     Frontend -->|Server Action| Action[analyzeLabel Action]
-    Action -->|Structured Prompt| Gemini[Gemini 1.5 Flash]
+    Action -->|Structured Prompt| Gemini[Gemini 3.0 Flash]
     Gemini -->|Structured JSON| Action
     Action -->|Result| Frontend
     Frontend -->|Render| UI[Analysis Result View]
